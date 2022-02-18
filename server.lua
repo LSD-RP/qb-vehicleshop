@@ -71,7 +71,8 @@ local function calculateNewFinance(paymentAmount, vehData)
 end
 
 local function GeneratePlate()
-    local plate = QBCore.Shared.RandomInt(1) .. QBCore.Shared.RandomStr(2) .. QBCore.Shared.RandomInt(3) .. QBCore.Shared.RandomStr(2)
+    -- local plate = QBCore.Shared.RandomInt(1) .. QBCore.Shared.RandomStr(2) .. QBCore.Shared.RandomInt(3) .. QBCore.Shared.RandomStr(2)\
+    local plate = QBCore.Shared.RandomStr(3):upper() .. ' ' .. QBCore.Shared.RandomInt(3)
     local result = MySQL.Sync.fetchScalar('SELECT plate FROM player_vehicles WHERE plate = ?', {plate})
     if result then
         return GeneratePlate()
@@ -420,13 +421,23 @@ RegisterNetEvent('qb-vehicleshop:server:checkFinance', function()
             for k,v in pairs(vehicles) do
                 if v.balance >= 1 and v.financetime < 1 then
                     local plate = v.plate
+                    
                     MySQL.Async.execute('DELETE FROM player_vehicles WHERE plate = @plate', {['@plate'] = plate})
                     TriggerClientEvent('QBCore:Notify', src, 'Your vehicle with plate '..plate..' has been repossessed', 'error')
+                    MySQL.Async.insert('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                        {player.PlayerData.license, player.PlayerData.citizenid, v["model"],
+                        GetHashKey(v["model"]), v["mods"], v["plate"], 0})
                 end
             end
         end)
     end
 end)
+
+QBCore.Commands.Add('carh', 'Spawn Vehicle (Admin Only)', { { name = 'model', help = 'Model name of the vehicle' } }, true, function(source, args)
+    print("carh triggered")
+    local src = source
+    TriggerClientEvent('QBCore:Command:SpawnVehicleNoHash', src, args[1])
+end, 'admin')
 
 -- Transfer vehicle to player in passenger seat
 QBCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'amount', help = 'Sell amount' }}, false, function(source, args)
@@ -439,8 +450,14 @@ QBCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
     if vehicle == 0 then return TriggerClientEvent('QBCore:Notify', src, 'Must be in a vehicle', 'error') end
     local driver = GetPedInVehicleSeat(vehicle, -1)
     local passenger = GetPedInVehicleSeat(vehicle, 0)
-    local plate = QBCore.Functions.GetPlate(vehicle)
+    -- local plate = QBCore.Functions.GetPlate(vehicle)
+    local plate = GetVehicleNumberPlateText(vehicle)
+    -- print("fetching plate")
+    -- print(plate)
+    -- print("test")
     local isOwned = MySQL.Sync.fetchScalar('SELECT citizenid FROM player_vehicles WHERE plate = ?', {plate})
+    -- print("is owned")
+    -- print(isOwned)
     if isOwned ~= citizenid then return TriggerClientEvent('QBCore:Notify', src, 'You dont own this vehicle', 'error') end
     if ped ~= driver then return TriggerClientEvent('QBCore:Notify', src, 'Must be driver', 'error') end
     if passenger == 0 then return TriggerClientEvent('QBCore:Notify', src, 'No passenger', 'error') end
@@ -450,7 +467,9 @@ QBCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
     if sellAmount then
         if target.Functions.GetMoney('cash') > sellAmount then
             local targetcid = target.PlayerData.citizenid
+            local targetlicense = target.PlayerData.license
             MySQL.Async.execute('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
+            MySQL.Async.execute('UPDATE player_vehicles SET license = ? WHERE plate = ?', {targetlicense, plate})
             player.Functions.AddMoney('cash', sellAmount)
             TriggerClientEvent('QBCore:Notify', src, 'You sold your vehicle for $'..comma_value(sellAmount), 'success')
             target.Functions.RemoveMoney('cash', sellAmount)
@@ -461,7 +480,9 @@ QBCore.Commands.Add('transferVehicle', 'Gift or sell your vehicle', {{ name = 'a
         end
     else
         local targetcid = target.PlayerData.citizenid
+        local targetlicense = target.PlayerData.license
         MySQL.Async.execute('UPDATE player_vehicles SET citizenid = ? WHERE plate = ?', {targetcid, plate})
+        MySQL.Async.execute('UPDATE player_vehicles SET license = ? WHERE plate = ?', {targetlicense, plate})
         TriggerClientEvent('QBCore:Notify', src, 'You gifted your vehicle', 'success')
         TriggerClientEvent('vehiclekeys:client:SetOwner', target.PlayerData.source, plate)
         TriggerClientEvent('QBCore:Notify', target.PlayerData.source, 'You were gifted a vehicle', 'success')

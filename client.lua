@@ -20,6 +20,57 @@ function getShopInsideOf()
     return nil
 end
 
+WaitForModel = function(model)
+    -- local DrawScreenText = function(text, red, green, blue, alpha)
+    --     SetTextFont(4)
+    --     SetTextScale(0.0, 0.5)
+    --     SetTextColour(red, green, blue, alpha)
+    --     SetTextDropshadow(0, 0, 0, 0, 255)
+    --     SetTextEdge(1, 0, 0, 0, 255)
+    --     SetTextDropShadow()
+    --     SetTextOutline()
+    --     SetTextCentre(true)
+    
+    --     BeginTextCommandDisplayText("STRING")
+    --     AddTextComponentSubstringPlayerName(text)
+    --     EndTextCommandDisplayText(0.5, 0.5)
+    -- end
+
+    if not IsModelValid(model) then
+        print("not valid")
+    end
+
+	if not HasModelLoaded(model) then
+		RequestModel(model)
+	end
+	
+	while not HasModelLoaded(model) do
+		Citizen.Wait(0)
+
+		DrawScreenText("Looking for you " .. GetDisplayNameFromVehicleModel(model) .. "...", 255, 255, 255, 150)
+	end
+end
+
+RegisterNetEvent('QBCore:Command:SpawnVehicleNoHash', function(vehName)
+    print("trying")
+    local ped = PlayerPedId()
+    
+    local hash = vehName
+    if not IsModelInCdimage(hash) then
+        print("cd image")
+        return
+    end
+    RequestModel(hash)
+    while not HasModelLoaded(hash) do
+        print("wait")
+        Wait(10)
+    end
+    local vehicle = CreateVehicle(hash, GetEntityCoords(ped), GetEntityHeading(ped), true, false)
+    TaskWarpPedIntoVehicle(ped, vehicle, -1)
+    SetModelAsNoLongerNeeded(vehicle)
+    TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(vehicle))
+end)
+
 -- Handlers
 
 AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
@@ -418,6 +469,7 @@ RegisterNetEvent('qb-vehicleshop:client:customTestDrive', function(data)
             TriggerEvent('vehiclekeys:client:SetOwner', QBCore.Functions.GetPlate(veh))
             TriggerServerEvent('qb-vehicletuning:server:SaveVehicleProps', QBCore.Functions.GetVehicleProperties(veh))
             testDriveVeh = veh
+            TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             QBCore.Functions.Notify('You have '..Config.Shops[shopInsideOf]["TestDriveTimeLimit"]..' minutes remaining')
             SetTimeout(Config.Shops[shopInsideOf]["TestDriveTimeLimit"] * 60000, function()
                 if testDriveVeh ~= 0 then

@@ -37,9 +37,10 @@ Config.Shops = {
             ['compacts'] = 'Compacts',
             ['motorcycles'] = 'Motorcycles',
             ['vans'] = 'Vans',
-            ['cycles'] = 'Bicycles'
+            ['cycles'] = 'Bicycles',
+            ['sports'] = 'Sports',
         },
-        ['TestDriveTimeLimit'] = 0.5, -- Time in minutes until the vehicle gets deleted
+        ['TestDriveTimeLimit'] = 5, -- Time in minutes until the vehicle gets deleted
         ['Location'] = vector3(-45.67, -1098.34, 26.42), -- Blip Location
         ['ReturnLocation'] = vector3(-44.74, -1082.58, 26.68), -- Location to return vehicle, only enables if the vehicleshop has a job owned
         ['VehicleSpawn'] = vector4(-56.79, -1109.85, 26.43, 71.5), -- Spawn location when vehicle is bought
@@ -107,10 +108,20 @@ Config.Shops = {
         ['ShopLabel'] = 'Luxury Vehicle Shop',
         ['showBlip'] = true,  --- true or false
         ['Categories'] = {
+            ['sportsclassics'] = 'Sports Classics',
+            ['sedans'] = 'Sedans',
+            ['coupes'] = 'Coupes',
+            ['suvs'] = 'SUVs',
+            ['offroad'] = 'Offroad',
+            ['muscle'] = 'Muscle',
+            ['compacts'] = 'Compacts',
+            ['motorcycles'] = 'Motorcycles',
+            ['vans'] = 'Vans',
+            ['cycles'] = 'Bicycles',
+            ['sports'] = 'Sports',
             ['super'] = 'Super',
-            ['sports'] = 'Sports'
         },
-        ['TestDriveTimeLimit'] = 0.5,
+        ['TestDriveTimeLimit'] = 5,
         ['Location'] = vector3(-1255.6, -361.16, 36.91),
         ['ReturnLocation'] = vector3(-1231.46, -349.86, 37.33),
         ['VehicleSpawn'] = vector4(-1231.46, -349.86, 37.33, 26.61),
@@ -145,6 +156,67 @@ Config.Shops = {
                 defaultVehicle = 'hexer',
                 chosenVehicle = 'hexer',
             },
+        }
+    },
+    ['police'] = {
+        ['Type'] = 'managed',  -- meaning a real player has to sell the car
+        ['Zone'] = {
+            ['Shape'] = {
+                vector2(-81.724754333496, 72.436462402344),
+                vector2(-60.159938812256, 60.576206207275),
+                vector2(-55.763122558594, 61.749210357666),
+                vector2(-52.965869903564, 69.869110107422),
+                vector2(-50.352680206299, 75.886123657227),
+                vector2(-61.261016845703, 81.564918518066),
+                vector2(-63.812171936035, 75.633102416992),
+                vector2(-76.546226501465, 81.189826965332)
+            },
+            ['minZ'] = 69.0,
+            ['maxZ'] = 76.0
+        },
+        ['Job'] = 'cardealer', -- Name of job or none
+        ['ShopLabel'] = 'Emergency Vehicle Shop',
+        ['showBlip'] = true,  --- true or false
+        ['Categories'] = {
+            ['sportsclassics'] = 'Sports Classics',
+            ['sedans'] = 'Sedans',
+            ['coupes'] = 'Coupes',
+            ['suvs'] = 'SUVs',
+            ['offroad'] = 'Offroad',
+            ['muscle'] = 'Muscle',
+            ['compacts'] = 'Compacts',
+            ['motorcycles'] = 'Motorcycles',
+            ['vans'] = 'Vans',
+            ['cycles'] = 'Bicycles',
+            ['sports'] = 'Sports',
+            ['super'] = 'Super',
+            ['emergency'] = 'Emergency'
+        },
+        ['TestDriveTimeLimit'] = 5,
+        ['Location'] = vector3(-63.59, 68.25, 73.06),
+        ['ReturnLocation'] = vector3(-65.05, 81.23, 71.16),
+        ['VehicleSpawn'] = vector4(-71.13, 84.04, 71.09, 65.23),
+        ['ShowroomVehicles'] = {
+            [1] = {
+                coords = vector4(-75.96, 74.78, 70.90, 221.69),
+                defaultVehicle = 'poldem',
+                chosenVehicle = 'poldem',
+            },
+            [2] = {
+                coords = vector4(-66.52, 74.33, 70.65, 188.03),
+                defaultVehicle = 'qrv',
+                chosenVehicle = 'qrv',
+            },
+            [3] = {
+                coords = vector4(-71.83, 68.60, 70.75, 276.57),
+                defaultVehicle = 'police',
+                chosenVehicle = 'police',
+            },
+            [4] = {
+                coords = vector4(-59.95, 68.61, 70.85, 181.44),
+                defaultVehicle = 'flyhoe',
+                chosenVehicle = 'flyhoe',
+            }
         }
     } -- Add your next table under this comma
 }
