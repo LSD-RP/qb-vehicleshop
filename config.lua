@@ -1,5 +1,5 @@
 Config = {}
-Config.UsingTarget = false -- If you are using qb-target (uses entity zones to target vehicles)
+Config.UsingTarget = true -- If you are using qb-target (uses entity zones to target vehicles)
 Config.Commission = 0.10 -- Percent that goes to sales person from a full car sale 10%
 Config.FinanceCommission = 0.05 -- Percent that goes to sales person from a finance sale 5%
 Config.FinanceZone = vector3(-29.53, -1103.67, 26.42) -- Where the finance menu is located
@@ -39,6 +39,9 @@ Config.Shops = {
             ['vans'] = 'Vans',
             ['cycles'] = 'Bicycles',
             ['sports'] = 'Sports',
+            ['commercial'] = 'Commercial',
+            ['industrial'] = 'Industrial',
+            ['utility'] = 'Utility',
         },
         ['TestDriveTimeLimit'] = 5, -- Time in minutes until the vehicle gets deleted
         ['Location'] = vector3(-45.67, -1098.34, 26.42), -- Blip Location
@@ -120,6 +123,10 @@ Config.Shops = {
             ['cycles'] = 'Bicycles',
             ['sports'] = 'Sports',
             ['super'] = 'Super',
+            ['commercial'] = 'Commercial',
+            ['industrial'] = 'Industrial',
+            ['military'] = 'Military',
+            ['utility'] = 'Utility',
         },
         ['TestDriveTimeLimit'] = 5,
         ['Location'] = vector3(-1255.6, -361.16, 36.91),
@@ -190,7 +197,8 @@ Config.Shops = {
             ['cycles'] = 'Bicycles',
             ['sports'] = 'Sports',
             ['super'] = 'Super',
-            ['emergency'] = 'Emergency'
+            ['emergency'] = 'Emergency',
+            ['utility'] = 'Utility',
         },
         ['TestDriveTimeLimit'] = 5,
         ['Location'] = vector3(-63.59, 68.25, 73.06),
@@ -218,5 +226,116 @@ Config.Shops = {
                 chosenVehicle = 'flyhoe',
             }
         }
-    } -- Add your next table under this comma
+    }, -- Add your next table under this comma
+    ['air'] = {
+        ['Type'] = 'managed',  -- meaning a real player has to sell the car
+        ['Zone'] = {
+            ['Shape'] = {
+                vector2(-1035.8176269532, -3017.3391113282),
+                vector2(-964.78723144532, -2893.7009277344),
+                vector2(-945.9535522461, -2895.3244628906),
+                vector2(-922.82336425782, -2910.6459960938),
+                vector2(-879.90606689454, -2957.9953613282),
+                vector2(-878.32110595704, -2980.6787109375),
+                vector2(-929.85925292968, -3079.0290527344),
+                vector2(-985.96875, -3052.6726074218)
+            },
+            ['minZ'] = 18.156301498414,
+            ['maxZ'] = 52.105125427246
+        },
+        ['Job'] = 'cardealer', -- Name of job or none
+        ['ShopLabel'] = 'Aircraft Shop',
+        ['showBlip'] = false,  --- true or false
+        ['Categories'] = {
+            ['helis'] = 'Helicopters',
+            ['planes'] = 'Airplanes',
+            ['military'] = 'Military',
+        },
+        ['TestDriveTimeLimit'] = 15,
+        ['Location'] = vector3(-968.0, -2979.05, 13.94),
+        ['ReturnLocation'] = vector4(-909.8, -3290.35, 13.94, 59.5),
+        ['VehicleSpawn'] = vector4(-909.8, -3290.35, 13.94, 59.5),
+        ['ShowroomVehicles'] = {
+            [1] = {
+                coords = vector4(-961.53, -2969.01, 12.95, 73.5),
+                defaultVehicle = 'frogger',
+                chosenVehicle = 'frogger',
+            },
+            [2] = {
+                coords = vector4(-966.22, -2946.07, 12.95, 141.26),
+                defaultVehicle = 'luxor',
+                chosenVehicle = 'luxor',
+            }
+        }
+    },
+    ['boats'] = {
+        ['Type'] = 'free-use',  
+        ['Zone'] = {
+            ['Shape'] = {
+                vector2(-734.12329101562, -1352.8647460938),
+                vector2(-748.60870361328, -1338.7033691406),
+                vector2(-736.7437133789, -1324.0876464844),
+                vector2(-721.2919921875, -1336.4350585938)
+            },
+            ['minZ'] = 2.198355436325,
+            ['maxZ'] = 3.91277384758
+        },
+        ['Job'] = 'none', -- Name of job or none
+        ['ShopLabel'] = 'Boat Shop',
+        ['showBlip'] = true,  --- true or false
+        ['Categories'] = {
+            ['speed'] = 'Speed Boats',
+            ['jetski'] = 'Jet Skis',
+            ['sail'] = 'Sail boats',
+            ['submersibles'] = 'Submersibles'
+        },
+        ['TestDriveTimeLimit'] = 15,
+        ['Location'] = vector3(-729.15, -1357.71, 1.23),
+        ['ReturnLocation'] = vector4(-729.15, -1357.71, 1.23, 134.68),
+        ['VehicleSpawn'] = vector4(-731.21, -1360.19, 0.08, 137.06),
+        ['ShowroomVehicles'] = {
+            [1] = {
+                coords = vector4(-730.87, -1335.05, 0.37, 230.99),
+                defaultVehicle = 'speeder2',
+                chosenVehicle = 'speeder2',
+            },
+            [2] = {
+                coords = vector4(-737.09, -1342.15, 0.37, 227.93),
+                defaultVehicle = 'marquis',
+                chosenVehicle = 'marquis',
+            }
+        }
+    },
+    ['military'] = {
+        ['Type'] = 'managed',  -- meaning a real player has to sell the car
+        ['Zone'] = {
+            ['Shape'] = {
+                vector2(-1923.3387451172, 2994.8627929688),
+                vector2(-1953.4569091796, 3013.205078125),
+                vector2(-1929.3970947266, 3054.7243652344),
+                vector2(-1896.9133300782, 3038.072265625)
+            },
+            ['minZ'] = 34.462337493896,
+            ['maxZ'] = 36.44369506836
+        },
+        ['Job'] = 'cardealer', -- Name of job or none
+        ['ShopLabel'] = 'Military Shop',
+        ['showBlip'] = false,  --- true or false
+        ['Categories'] = {
+            ['helis'] = 'Helicopters',
+            ['planes'] = 'Airplanes',
+            ['military'] = 'Military',
+        },
+        ['TestDriveTimeLimit'] = 15,
+        ['Location'] = vector3(-1918.72, 3028.66, 33.1),
+        ['ReturnLocation'] = vector4(-1875.28, 3009.47, 32.77, 151.16),
+        ['VehicleSpawn'] = vector4(-1875.28, 3009.47, 32.77, 151.16),
+        ['ShowroomVehicles'] = {
+            [1] = {
+                coords = vector4(-1923.42, 3025.07, 32.83, 141.87),
+                defaultVehicle = 'besra',
+                chosenVehicle = 'besra',
+            }
+        }
+    },
 }
