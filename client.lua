@@ -491,7 +491,7 @@ end)
 RegisterNetEvent('qb-vehicleshop:client:TestDriveReturn', function()
     local ped = PlayerPedId()
     local veh = GetVehiclePedIsIn(ped)
-    if veh == testDriveVeh then
+    if GetVehicleNumberPlateText(veh) == "TESTDRIV" then
         testDriveVeh = 0
         inTestDrive = false
         QBCore.Functions.DeleteVehicle(veh)
@@ -613,7 +613,8 @@ RegisterNetEvent('qb-vehicleshop:client:openCustomFinance', function(data)
 end)
 
 RegisterNetEvent('qb-vehicleshop:client:swapVehicle', function(data)
-    local shopName = getShopInsideOf()
+    -- local shopName = getShopInsideOf()
+    local shopName = data.ClosestShop
     if Config.Shops[shopName]["ShowroomVehicles"][data.ClosestVehicle].chosenVehicle ~= data.toVehicle then
         local closestVehicle, closestDistance = QBCore.Functions.GetClosestVehicle(vector3(Config.Shops[shopName]["ShowroomVehicles"][data.ClosestVehicle].coords.x, Config.Shops[shopName]["ShowroomVehicles"][data.ClosestVehicle].coords.y, Config.Shops[shopName]["ShowroomVehicles"][data.ClosestVehicle].coords.z))
         if closestVehicle == 0 then return end
