@@ -145,9 +145,11 @@ RegisterNetEvent('qb-vehicleshop:server:financePayment', function(paymentAmount,
         if player and paymentAmount >= minPayment then
             if cash >= paymentAmount then
                 player.Functions.RemoveMoney('cash', paymentAmount)
+                TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", paymentAmount)
                 MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
             elseif bank >= paymentAmount then
                 player.Functions.RemoveMoney('bank', paymentAmount)
+                TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", paymentAmount)
                 MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
             else
                 TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
@@ -172,9 +174,11 @@ RegisterNetEvent('qb-vehicleshop:server:financePaymentFull', function(data)
     if player and vehBalance ~= 0 then
         if cash >= vehBalance then
             player.Functions.RemoveMoney('cash', vehBalance)
+            TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehBalance)
             MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
         elseif bank >= vehBalance then
             player.Functions.RemoveMoney('bank', vehBalance)
+            TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehBalance)
             MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
         else
             TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
@@ -195,7 +199,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
     local vehiclePrice = QBCore.Shared.Vehicles[vehicle]['price']
     local plate = GeneratePlate()
     if cash > vehiclePrice then
-        MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -207,8 +211,9 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('cash', vehiclePrice, 'vehicle-bought-in-showroom')
+        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehiclePrice)
     elseif bank > vehiclePrice then
-        MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -220,6 +225,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('bank', vehiclePrice, 'vehicle-bought-in-showroom')
+        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehiclePrice)
     else
         TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
     end
@@ -243,7 +249,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
     local plate = GeneratePlate()
     local balance, vehPaymentAmount = calculateFinance(vehiclePrice, downPayment, paymentAmount)
     if cash >= downPayment then
-        MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -259,8 +265,9 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('cash', downPayment, 'vehicle-bought-in-showroom')
+        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", downPayment)
     elseif bank >= downPayment then
-        MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+        exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
             pData.PlayerData.license,
             cid,
             vehicle,
@@ -276,6 +283,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('bank', downPayment, 'vehicle-bought-in-showroom')
+        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", downPayment)
     else
         TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
     end
@@ -301,7 +309,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellShowroomVehicle', function(data, pla
         local commission = round(vehiclePrice * Config.Commission)
         local plate = GeneratePlate()
         if cash >= vehiclePrice then
-            MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+            exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
                 target.PlayerData.license,
                 cid,
                 vehicle,
@@ -317,7 +325,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellShowroomVehicle', function(data, pla
             TriggerEvent('qb-bossmenu:server:addAccountMoney', player.PlayerData.job.name, vehiclePrice)
             TriggerClientEvent('QBCore:Notify', target.PlayerData.source, 'Congratulations on your purchase!', 'success')
         elseif bank >= vehiclePrice then
-            MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
+            exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)', {
                 target.PlayerData.license,
                 cid,
                 vehicle,
@@ -367,7 +375,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellfinanceVehicle', function(downPaymen
         local plate = GeneratePlate()
         local balance, vehPaymentAmount = calculateFinance(vehiclePrice, downPayment, paymentAmount)
         if cash >= downPayment then
-            MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+            exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
                 target.PlayerData.license,
                 cid,
                 vehicle,
@@ -387,7 +395,7 @@ RegisterNetEvent('qb-vehicleshop:server:sellfinanceVehicle', function(downPaymen
             TriggerEvent('qb-bossmenu:server:addAccountMoney', player.PlayerData.job.name, vehiclePrice)
             TriggerClientEvent('QBCore:Notify', target.PlayerData.source, 'Congratulations on your purchase!', 'success')
         elseif bank >= downPayment then
-            MySQL.Async.insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+            exports.oxmysql:insert('INSERT INTO player_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
                 target.PlayerData.license,
                 cid,
                 vehicle,
@@ -434,7 +442,7 @@ RegisterNetEvent('qb-vehicleshop:server:checkFinance', function()
                     
                     MySQL.Async.execute('DELETE FROM player_vehicles WHERE plate = @plate', {['@plate'] = plate})
                     TriggerClientEvent('QBCore:Notify', src, 'Your vehicle with plate '..plate..' has been repossessed', 'error')
-                    MySQL.Async.insert('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                    exports.oxmysql:insert('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
                         {player.PlayerData.license, player.PlayerData.citizenid, v["model"],
                         GetHashKey(v["model"]), v["mods"], v["plate"], 0})
                 end

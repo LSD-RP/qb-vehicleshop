@@ -149,17 +149,17 @@ Config.Shops = {
                 chosenVehicle = 'nero',
             },
             [4] = {
-                coords = vector4(-1252.07, -364.2, 36.91, 56.44),
+                coords = vector4(-1252.07, -364.2, 35.91, 56.44),
                 defaultVehicle = 'bati',
                 chosenVehicle = 'bati',
             },
             [5] = {
-                coords = vector4(-1255.49, -365.91, 36.91, 55.63),
+                coords = vector4(-1255.49, -365.91, 35.91, 55.63),
                 defaultVehicle = 'carbonrs',
                 chosenVehicle = 'carbonrs',
             },
             [6] = {
-                coords = vector4(-1249.21, -362.97, 36.91, 53.24),
+                coords = vector4(-1249.21, -362.97, 35.91, 53.24),
                 defaultVehicle = 'hexer',
                 chosenVehicle = 'hexer',
             },
