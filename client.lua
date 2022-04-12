@@ -361,6 +361,13 @@ function createManagedShop(shopShape, name, jobName)
                                 event = 'qb-vehicleshop:client:vehCategories',
                             }
                         },
+                        {
+                            header = 'Purchasing',
+                            txt = 'Contact a car dealer to purchase or finance a vehicle',
+                            params = {
+                                event = 'qb-vehicleshop:client:vehCategories',
+                            }
+                        },
                     }
                     if PlayerData.job.name == Config.Shops[name]['Job'] then
                         vehicleMenu[#vehicleMenu+1] = {
