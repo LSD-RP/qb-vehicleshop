@@ -255,7 +255,8 @@ local function createVehZones(shopName) -- This will create an entity zone if co
                     label = "Vehicle Interaction",
                     canInteract = function(entity)
                         local closestShop = getShopInsideOf()
-                        if (closestShop ~= nil) and (Config.Shops[closestShop]['Job'] == 'none' or PlayerData.job.name == Config.Shops[closestShop]['Job']) then
+                        --   and (Config.Shops[closestShop]['Job'] == 'none') or PlayerData.job.name == Config.Shops[closestShop]['Job']
+                        if (closestShop ~= nil)then
                             return true
                         end
                         return false
@@ -345,46 +346,13 @@ function createManagedShop(shopShape, name, jobName)
         if isPointInside then
             insideZones[name] = true
             CreateThread(function()
-                while insideZones[name] and PlayerData.job ~= nil and PlayerData.job.name == Config.Shops[name]['Job'] do
+                while insideZones[name] and PlayerData.job ~= nil do
                     setClosestShowroomVehicle()
                     local closestShop = getShopInsideOf()
                     vehicleMenu = {
                         {
                             isMenuHeader = true,
                             header = getVehBrand():upper().. ' '..getVehName():upper().. ' - $' ..getVehPrice(),
-                        },
-                        {
-                            header = 'Test Drive',
-                            txt = 'Allow player for test drive',
-                            params = {
-                                event = 'qb-vehicleshop:client:openIdMenu',
-                                args = {
-                                    vehicle = Config.Shops[closestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle,
-                                    type = 'testDrive'
-                                }
-                            }
-                        },
-                        {
-                            header = "Sell Vehicle",
-                            txt = 'Sell vehicle to Player',
-                            params = {
-                                event = 'qb-vehicleshop:client:openIdMenu',
-                                args = {
-                                    vehicle = Config.Shops[closestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle,
-                                    type = 'sellVehicle'
-                                }
-                            }
-                        },
-                        {
-                            header = 'Finance Vehicle',
-                            txt = 'Finance vehicle to Player',
-                            params = {
-                                event = 'qb-vehicleshop:client:openCustomFinance',
-                                args = {
-                                    price = getVehPrice(),
-                                    vehicle = Config.Shops[closestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
-                                }
-                            }
                         },
                         {
                             header = 'Swap Vehicle',
@@ -394,6 +362,41 @@ function createManagedShop(shopShape, name, jobName)
                             }
                         },
                     }
+                    if PlayerData.job.name == Config.Shops[name]['Job'] then
+                        vehicleMenu[#vehicleMenu+1] = {
+                            header = 'Test Drive',
+                            txt = 'Allow player for test drive',
+                            params = {
+                                event = 'qb-vehicleshop:client:openIdMenu',
+                                args = {
+                                    vehicle = Config.Shops[closestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle,
+                                    type = 'testDrive'
+                                }
+                            }
+                        }
+                        vehicleMenu[#vehicleMenu+1] = {
+                            header = "Sell Vehicle",
+                            txt = 'Sell vehicle to Player',
+                            params = {
+                                event = 'qb-vehicleshop:client:openIdMenu',
+                                args = {
+                                    vehicle = Config.Shops[closestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle,
+                                    type = 'sellVehicle'
+                                }
+                            }
+                        }
+                        vehicleMenu[#vehicleMenu+1] = {
+                            header = 'Finance Vehicle',
+                            txt = 'Finance vehicle to Player',
+                            params = {
+                                event = 'qb-vehicleshop:client:openCustomFinance',
+                                args = {
+                                    price = getVehPrice(),
+                                    vehicle = Config.Shops[closestShop]["ShowroomVehicles"][ClosestVehicle].chosenVehicle
+                                }
+                            }
+                        }
+                    end
                     Wait(1000)
                 end
             end)
@@ -450,7 +453,7 @@ RegisterNetEvent('qb-vehicleshop:client:TestDrive', function()
             testDriveVeh = veh
             QBCore.Functions.Notify('You have '..Config.Shops[closestShop]["TestDriveTimeLimit"]..' minutes remaining')
             SetTimeout(Config.Shops[closestShop]["TestDriveTimeLimit"] * 60000, function()
-                if testDriveVeh ~= 0 then
+                if testDriveVeh == veh then
                     testDriveVeh = 0
                     inTestDrive = false
                     QBCore.Functions.DeleteVehicle(veh)

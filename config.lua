@@ -127,6 +127,7 @@ Config.Shops = {
             ['industrial'] = 'Industrial',
             ['military'] = 'Military',
             ['utility'] = 'Utility',
+            ['openwheel'] = 'Open Wheel',
         },
         ['TestDriveTimeLimit'] = 5,
         ['Location'] = vector3(-1255.6, -361.16, 36.91),

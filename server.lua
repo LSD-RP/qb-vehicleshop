@@ -467,7 +467,7 @@ RegisterNetEvent('qb-vehicleshop:server:transferVehicle', function(plate, buyerI
     local player = QBCore.Functions.GetPlayer(src)
     local target = QBCore.Functions.GetPlayer(buyerId)
     local citizenid = player.PlayerData.citizenid
-    local sellAmount = tonumber(args[1])
+    local sellAmount = tonumber(amount)
     local vehicle = GetVehiclePedIsIn(ped, false)
     if vehicle == 0 then return TriggerClientEvent('QBCore:Notify', src, 'Must be in a vehicle', 'error') end
     local driver = GetPedInVehicleSeat(vehicle, -1)
