@@ -26,7 +26,9 @@ Config.Shops = {
         },
         ['Job'] = 'none', -- Name of job or none
         ['ShopLabel'] = 'Premium Deluxe Motorsport', -- Blip name
-        ['showBlip'] = true,  --- true or false
+        ['showBlip'] = true,  -- true or false
+        ['blipSprite'] = 326,  -- Blip sprite
+        ['blipColor'] = 3,  -- Blip color
         ['Categories'] = { -- Categories available to browse
             ['sportsclassics'] = 'Sports Classics',
             ['sedans'] = 'Sedans',
@@ -109,7 +111,9 @@ Config.Shops = {
         },
         ['Job'] = 'cardealer', -- Name of job or none
         ['ShopLabel'] = 'Luxury Vehicle Shop',
-        ['showBlip'] = true,  --- true or false
+        ['showBlip'] = true,  -- true or false
+        ['blipSprite'] = 326,  -- Blip sprite
+        ['blipColor'] = 3,  -- Blip color
         ['Categories'] = {
             ['sportsclassics'] = 'Sports Classics',
             ['sedans'] = 'Sedans',
