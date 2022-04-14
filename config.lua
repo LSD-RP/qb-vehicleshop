@@ -190,7 +190,9 @@ Config.Shops = {
         },
         ['Job'] = 'cardealer', -- Name of job or none
         ['ShopLabel'] = 'Emergency Vehicle Shop',
-        ['showBlip'] = true,  --- true or false
+        ['showBlip'] = true,  -- true or false
+        ['blipSprite'] = 326,  -- Blip sprite
+        ['blipColor'] = 3,  -- Blip color
         ['Categories'] = {
             ['sportsclassics'] = 'Sports Classics',
             ['sedans'] = 'Sedans',
@@ -327,7 +329,9 @@ Config.Shops = {
         },
         ['Job'] = 'cardealer', -- Name of job or none
         ['ShopLabel'] = 'Military Shop',
-        ['showBlip'] = false,  --- true or false
+        ['showBlip'] = false,  -- true or false
+        ['blipSprite'] = 326,  -- Blip sprite
+        ['blipColor'] = 3,  -- Blip color
         ['Categories'] = {
             ['helis'] = 'Helicopters',
             ['planes'] = 'Airplanes',
