@@ -186,7 +186,8 @@ Config.Shops = {
                 vector2(-76.546226501465, 81.189826965332)
             },
             ['minZ'] = 69.0,
-            ['maxZ'] = 76.0
+            ['maxZ'] = 76.0,
+            ['size'] = 2.75, -- size of the vehicles zones
         },
         ['Job'] = 'cardealer', -- Name of job or none
         ['ShopLabel'] = 'Emergency Vehicle Shop',
@@ -325,7 +326,8 @@ Config.Shops = {
                 vector2(-1896.9133300782, 3038.072265625)
             },
             ['minZ'] = 34.462337493896,
-            ['maxZ'] = 36.44369506836
+            ['maxZ'] = 36.44369506836,
+            ['size'] = 5.75, -- size of the vehicles zones
         },
         ['Job'] = 'cardealer', -- Name of job or none
         ['ShopLabel'] = 'Military Shop',
@@ -371,7 +373,8 @@ Config.Shops = {
             ['speed'] = 'Speed Boats',
             ['jetski'] = 'Jet Skis',
             ['sail'] = 'Sail boats',
-            ['submersibles'] = 'Submersibles'
+            ['submersibles'] = 'Submersibles',
+            ['boats'] = 'Boats'
         },
         ['TestDriveTimeLimit'] = 1.5, -- Time in minutes until the vehicle gets deleted
         ['Location'] = vector3(-738.25, -1334.38, 1.6), -- Blip Location
@@ -419,7 +422,7 @@ Config.Shops = {
         ['blipSprite'] = 251,  -- Blip sprite
         ['blipColor'] = 3,  -- Blip color
         ['Categories'] = { -- Categories available to browse
-            ['helicopters'] = 'Helicopters',
+            ['helis'] = 'Helicopters',
             ['planes'] = 'Planes',
         },
         ['TestDriveTimeLimit'] = 1.5, -- Time in minutes until the vehicle gets deleted

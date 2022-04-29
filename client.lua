@@ -155,7 +155,7 @@ local function getVehPrice()
 end
 
 local function getVehBrand()
-    return QBCore.Shared.Vehicles[Config.Shops[getShopInsideOf()]["ShowroomVehicles"][ClosestVehicle].chosenVehicle]["brand"]
+    return QBCore.Shared.Vehicles[Config.Shops[getShopInsideOf()]["ShowroomVehicles"][ClosestVehicle].chosenVehicle]["brand"] or "ERROR"
 end
 
 local function setClosestShowroomVehicle()

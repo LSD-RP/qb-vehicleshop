@@ -145,11 +145,11 @@ RegisterNetEvent('qb-vehicleshop:server:financePayment', function(paymentAmount,
         if player and paymentAmount >= minPayment then
             if cash >= paymentAmount then
                 player.Functions.RemoveMoney('cash', paymentAmount)
-                TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", paymentAmount)
+                exports['qb-management']:AddMoney("cardealer", paymentAmount)
                 MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
             elseif bank >= paymentAmount then
                 player.Functions.RemoveMoney('bank', paymentAmount)
-                TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", paymentAmount)
+                exports['qb-management']:AddMoney("cardealer", paymentAmount)
                 MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {newBalance, newPayment, newPaymentsLeft, timer, plate})
             else
                 TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
@@ -174,11 +174,11 @@ RegisterNetEvent('qb-vehicleshop:server:financePaymentFull', function(data)
     if player and vehBalance ~= 0 then
         if cash >= vehBalance then
             player.Functions.RemoveMoney('cash', vehBalance)
-            TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehBalance)
+            exports['qb-management']:AddMoney("cardealer", vehBalance)
             MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
         elseif bank >= vehBalance then
             player.Functions.RemoveMoney('bank', vehBalance)
-            TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehBalance)
+            exports['qb-management']:AddMoney("cardealer", vehBalance)
             MySQL.Async.execute('UPDATE player_vehicles SET balance = ?, paymentamount = ?, paymentsleft = ?, financetime = ? WHERE plate = ?', {0, 0, 0, 0, vehPlate})
         else
             TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
@@ -211,7 +211,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('cash', vehiclePrice, 'vehicle-bought-in-showroom')
-        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehiclePrice)
+        exports['qb-management']:AddMoney("cardealer", vehiclePrice)
         TriggerEvent("qb-log:server:CreateLog", "vehicleshop", "Vehicle Purchased", "red","**" .. GetPlayerName(src) .. "** bought a " .. vehicle .. ' for ' .. vehiclePrice)
 
     elseif bank > vehiclePrice then
@@ -227,7 +227,7 @@ RegisterNetEvent('qb-vehicleshop:server:buyShowroomVehicle', function(vehicle)
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('bank', vehiclePrice, 'vehicle-bought-in-showroom')
-        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", vehiclePrice)
+        exports['qb-management']:AddMoney("cardealer", vehiclePrice)
         TriggerEvent("qb-log:server:CreateLog", "vehicleshop", "Vehicle Purchased", "red","**" .. GetPlayerName(src) .. "** bought a " .. vehicle .. ' for ' .. vehiclePrice)
 
     else
@@ -269,7 +269,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('cash', downPayment, 'vehicle-bought-in-showroom')
-        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", downPayment)
+        exports['qb-management']:AddMoney("cardealer", downPayment)
         TriggerEvent("qb-log:server:CreateLog", "vehicleshop", "Vehicle Financed", "red","**" .. GetPlayerName(src) .. "** financed a " .. vehicle .. ' for downpayment of ' .. downPayment)
 
     elseif bank >= downPayment then
@@ -289,7 +289,7 @@ RegisterNetEvent('qb-vehicleshop:server:financeVehicle', function(downPayment, p
         TriggerClientEvent('QBCore:Notify', src, 'Congratulations on your purchase!', 'success')
         TriggerClientEvent('qb-vehicleshop:client:buyShowroomVehicle', src, vehicle, plate)
         pData.Functions.RemoveMoney('bank', downPayment, 'vehicle-bought-in-showroom')
-        TriggerEvent('qb-bossmenu:server:addAccountMoney', "cardealer", downPayment)
+        exports['qb-management']:AddMoney("cardealer", downPayment)
         TriggerEvent("qb-log:server:CreateLog", "vehicleshop", "Vehicle Financed", "red","**" .. GetPlayerName(src) .. "** financed a " .. vehicle .. ' for downpayment of ' .. downPayment)
 
     else
