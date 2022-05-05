@@ -444,24 +444,40 @@ RegisterNetEvent('qb-vehicleshop:server:checkFinance', function()
     for k,v in pairs(result) do
         if v.balance >= 1 and v.financetime < 1 then
             paymentDue = true
+            -- print("INSIDE FIRST")
+            -- print(v.plate)
         end
     end
     if paymentDue then
         TriggerClientEvent('QBCore:Notify', src, 'Your vehicle payment is due within '..Config.PaymentWarning..' minutes')
         Wait(Config.PaymentWarning * 60000)
-        MySQL.Sync.fetchAll('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid}, function(vehicles)
-            for k,v in pairs(vehicles) do
-                if v.balance >= 1 and v.financetime < 1 then
-                    local plate = v.plate
-                    
-                    MySQL.Async.execute('DELETE FROM player_vehicles WHERE plate = @plate', {['@plate'] = plate})
-                    TriggerClientEvent('QBCore:Notify', src, 'Your vehicle with plate '..plate..' has been repossessed', 'error')
-                    exports.oxmysql:insert('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                        {player.PlayerData.license, player.PlayerData.citizenid, v["model"],
-                        GetHashKey(v["model"]), v["mods"], v["plate"], 0})
+        -- Wait(10000)
+        local result = MySQL.Sync.fetchAll('SELECT * FROM player_vehicles WHERE citizenid = ?', {player.PlayerData.citizenid})
+        for k,v in pairs(result) do
+
+            if v.balance >= 1 and v.financetime < 1 then
+                local plate = v.plate    
+                TriggerClientEvent('QBCore:Notify', src, 'Your vehicle with plate '..plate..' has been repossessed', 'error')
+                exports.oxmysql:execute('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
+                    player.PlayerData.license, player.PlayerData.citizenid, v.vehicle, GetHashKey(v.vehicle), json.encode(v.mods), v.plate,
+                    0, v.balance, v.paymentamount, v.paymentsleft, v.financetime
+                })
+                -- local newrep = player.PlayerData.metadata["creditscore"]
+                -- newrep.creditscore = tonumber(args[2])
+                -- Player.Functions.SetMetaData("jobrep", newrep)
+                local rep = player.PlayerData.metadata["creditscore"]
+                local num = 0
+                if rep then
+                    num = rep.vehiclesRepod
                 end
+                player.Functions.SetMetaData("creditscore", {
+                    ["vehiclesRepod"] = num + 1,
+                })
+                MySQL.Async.execute('DELETE FROM player_vehicles WHERE plate = @plate', {['@plate'] = plate})
+                -- exports.oxmysql:execute('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                --     {player.PlayerData.license, player.PlayerData.citizenid, v["model"], GetHashKey(v["model"]), v["mods"], v["plate"], 0})
             end
-        end)
+        end
     end
 end)
 
