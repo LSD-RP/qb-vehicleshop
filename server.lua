@@ -459,7 +459,7 @@ RegisterNetEvent('qb-vehicleshop:server:checkFinance', function()
                 local plate = v.plate    
                 TriggerClientEvent('QBCore:Notify', src, 'Your vehicle with plate '..plate..' has been repossessed', 'error')
                 exports.oxmysql:execute('INSERT INTO repo_vehicles (license, citizenid, vehicle, hash, mods, plate, state, balance, paymentamount, paymentsleft, financetime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', {
-                    player.PlayerData.license, player.PlayerData.citizenid, v.vehicle, GetHashKey(v.vehicle), json.encode(v.mods), v.plate,
+                    player.PlayerData.license, player.PlayerData.citizenid, v.vehicle, GetHashKey(v.vehicle), v.mods, v.plate,
                     0, v.balance, v.paymentamount, v.paymentsleft, v.financetime
                 })
                 -- local newrep = player.PlayerData.metadata["creditscore"]
